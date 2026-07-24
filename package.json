@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "compile": "/home/user/.local/bin/compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier",
+    "compile": "compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier || $HOME/.local/bin/compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier",
     "build": "npx tsc --noEmit || true",
     "setup": "npx tsx src/setup.ts",
     "deploy": "npx tsx src/deploy.ts",
@@ -41,17 +41,10 @@
     "@types/ws": "^8.18.1",
     "tsx": "^4.23.1",
     "typescript": "^6.0.3",
-    "vitest": "^2.1.9"
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=22.0.0"
   },
-  "keywords": [
-    "midnight",
-    "blockchain",
-    "zero-knowledge",
-    "privacy",
-    "prescription",
-    "healthcare"
-  ]
+  "keywords": ["midnight", "blockchain", "zero-knowledge", "privacy", "prescription", "healthcare"]
 }
