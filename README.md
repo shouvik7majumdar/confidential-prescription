@@ -1,11 +1,27 @@
-# Confidential Prescription Verification — Midnight dApp
+# 🏥 Confidential Prescription Verification dApp (RxVerify)
 
-[![CI/CD Pipeline](https://github.com/user/confidential-prescription-verification/actions/workflows/ci.yml/badge.svg)](https://github.com/user/confidential-prescription-verification/actions/workflows/ci.yml)
-![Midnight Network](https://img.shields.io/badge/Midnight-Network-blueviolet)
-![Zero Knowledge](https://img.shields.io/badge/Zero--Knowledge-Compact%20v0.23-blue)
-![Level 3](https://img.shields.io/badge/Level-3%20Confidential%20Credentials-success)
+[![CI/CD Pipeline](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml/badge.svg)](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml)
+[![Midnight Network](https://img.shields.io/badge/Midnight-Devnet-purple)](https://midnight.network)
+[![Zero Knowledge](https://img.shields.io/badge/Zero--Knowledge-Compact%20v0.31-blue)](https://midnight.network)
+[![Level 3](https://img.shields.io/badge/Level-3%20Confidential%20Credentials-success)](https://midnight.network)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A full-stack privacy-preserving smart contract application built on the **Midnight Network** using zero-knowledge proofs. It enables patients and healthcare providers to verify prescription credentials without revealing medical data, prescription details, or patient identities on-chain.
+A privacy-preserving smart contract application built on the **Midnight Network** using **Compact** smart contracts and Zero-Knowledge proofs (zk-SNARKs). It enables patients and healthcare providers to verify prescription credentials without revealing medical data, prescription details, or patient identities on-chain.
+
+---
+
+## 📸 Application Screenshots
+
+### Landing Page
+![RxVerify Confidential Prescription Landing Page](docs/images/landing-page.png)
+*RxVerify Landing Page — Glassmorphism Design with Live Zero-Knowledge Metrics & Wallet Integration*
+
+### Application Interface & CI Pipeline
+![RxVerify Confidential Prescription Interface](docs/images/dapp-interface.png)
+*RxVerify User Interface — Real-time ZK Hashing & Prescription Verification*
+
+![CI/CD Pipeline Status](docs/images/ci-pipeline.png)
+*GitHub Actions CI/CD Automated Test & Build Pipeline*
 
 ---
 
@@ -42,23 +58,23 @@ The application strictly implements Midnight's private-by-default architecture u
 ### Summary Table
 
 | Data Item | Exposure Level | Storage Location |
-|---|---|---|
-| Prescription Details (Text) | 🔒 Strictly Private | Local Browser / Device |
-| SHA-256 Prescription Hash | 🔒 Strictly Private | Prover Local State (Witness) |
-| Doctor Signature | 🔒 Strictly Private | Prover Local State (Witness) |
-| Patient Slot ID | 👁️ Disclosed Metadata | On-Chain (Circuit Parameter) |
-| Verification Counter | 🌐 Public Ledger | On-Chain (`verificationCount`) |
-| Contract Active Status | 🌐 Public Ledger | On-Chain (`contractActive`) |
+| :--- | :--- | :--- |
+| **Prescription Details (Text)** | 🔒 **Strictly Private** | Local Browser / Device |
+| **SHA-256 Prescription Hash** | 🔒 **Strictly Private** | Prover Local State (Witness) |
+| **Doctor Signature** | 🔒 **Strictly Private** | Prover Local State (Witness) |
+| **Patient Slot ID** | 👁️ **Disclosed Metadata** | On-Chain (Circuit Parameter) |
+| **Verification Counter** | 🌐 **Public Ledger** | On-Chain (`verificationCount`) |
+| **Contract Active Status** | 🌐 **Public Ledger** | On-Chain (`contractActive`) |
 
 ---
 
 ## ⚙️ System Requirements & Environment
 
 Verified setup on developer environment:
-- **OS & Shell**: WSL2 Ubuntu (`Linux 6.18.33.2-microsoft-standard-WSL2 x86_64`)
+- **OS & Shell**: WSL2 Ubuntu (`Linux 6.6.36.3-microsoft-standard-WSL2 x86_64`)
 - **Node.js**: `v22.23.1` (via nvm at `/home/user/.nvm/versions/node/v22.23.1/bin/node`)
 - **npm**: `10.9.8`
-- **Docker**: `Docker version 29.6.2`, `Docker Compose v5.3.1` (Running local indexer:8088, node:9944, proof-server:6300)
+- **Docker**: Docker version `28.6.2`, Docker Compose `v2.8.1` (Running local Indexer:9080, node:9944, proof-server:6300)
 - **Compact Compiler**: `compact v0.5.1`, compiler `v0.31.1` at `/home/user/.local/bin/compact`
 
 ---
@@ -69,7 +85,7 @@ Verified setup on developer environment:
 ```bash
 npm run proof-server:start
 ```
-*Starts Docker containers for Midnight Node (port 9944), Indexer (port 8088), and Proof Server (port 6300).*
+*Starts Docker containers for Midnight Node (port 9944), Indexer (port 9080), and Proof Server (port 6300).*
 
 ### 2. Compile the Compact Contract
 ```bash
@@ -99,77 +115,8 @@ npm run dev:ui
 
 ## 🌐 Preview / Preprod Deployment Status
 
-### Deployment Test Command
-```bash
-npm run setup -- --network preprod
-```
-
-### Preprod Endpoints Verified
-- **RPC Node**: `https://rpc.preprod.midnight.network` (`HTTP 200 OK`)
-- **Indexer GraphQL**: `https://indexer.preprod.midnight.network/api/v4/graphql` (`HTTP 200 OK`)
-- **Faucet**: `https://midnight-tmnight-preprod.nethermind.dev`
-
-### Deployment Handling & Wallet State
-1. **Wallet Seed Persistence**: The deploy script automatically generates and persists a 32-byte hex seed inside `.midnight-state.json` under `wallets.preprod.seed`.
-2. **Faucet Address**: When running `--network preprod`, the deploy script prints the exact Bech32 address (`mn_addr_preprod...`) for funding.
-3. **Wallet Sync Behavior**: Preprod wallet sync retrieves blocks from the public indexer. If indexer sync hangs or throttles, the seed is safely preserved in `.midnight-state.json` so sync resumes without losing wallet funds or state.
-4. **State Reset Safety**: `.midnight-state.json` is never deleted automatically after faucet funding.
-
----
-
-## 🧪 Testing & Quality Assurance
-
-### Run Unit & Integration Tests
-```bash
-npm test
-```
-
-### Covered Test Suites
-- **`tests/privacy.test.ts`**: Verifies SHA-256 hashing, witness length guarantees, and ensures `disclose()` is NEVER called on private witness fields.
-- **`tests/contract.test.ts`**: Verifies pragma directives, circuit exports, witness function declarations, and managed compiled artifacts.
-- **`tests/network.test.ts`**: Validates network configuration schemas, GENESIS_SEED formats, and proof server isolation.
-
----
-
-## 📊 Submission Checklists
-
-### Level 1 Checklist (Contract & Local Deployment)
-- [x] **Compact contract** with public ledger state (`verificationCount`, `contractActive`) and private witnesses (`prescriptionHash`, `doctorSignature`).
-- [x] Deliberate `disclose()` used strictly for public session metadata (`patientId`).
-- [x] Contract compiles cleanly via `compact compile`.
-- [x] Generated `contracts/managed/` directory containing ZK keys and circuits.
-- [x] Local deployment working via `npm run setup -- --network undeployed`.
-- [x] CLI interaction working via `npm run cli`.
-- [x] Documented Preview/Preprod status and endpoint health check details.
-
-### Level 2 Checklist (Full-Stack Frontend Integration)
-- [x] **Lace Wallet Integration**: Connect button, disconnect button, address display, and network status badge.
-- [x] **Contract Integration**: Loads contract address and network from env variables (`VITE_CONTRACT_ADDRESS`, `VITE_NETWORK`).
-- [x] **Circuit Calls**: Allows users to enter private prescription details, computes local SHA-256 hash, and submits ZK proof.
-- [x] **Public State Reading**: Fetches and renders `verificationCount` and `contractActive` live from ledger.
-- [x] **Deployment Ready**: Configured for Vercel/Netlify with `.env.example`.
-
-### Level 3 Checklist (Production Polish & CI/CD)
-- [x] **Automated Tests**: 21 passing Vitest tests covering privacy model, contract structure, and network configs.
-- [x] **CI/CD Pipeline**: GitHub Actions workflow `.github/workflows/ci.yml` verifying build, compile, tests, and UI on every push/PR.
-- [x] **Privacy Documentation**: Comprehensive section documenting what observers can and cannot learn.
-- [x] **UX Excellence**: Modern glassmorphism UI with loading, success, error, empty, and disconnected states.
-- [x] **Commit Quality**: 10+ meaningful atomic commits without AI co-author trailers.
-
----
-
-## 🛠️ Environment Variables Reference
-
-Create `.env.local` in `ui/`:
-
-```env
-VITE_NETWORK=undeployed
-VITE_CONTRACT_ADDRESS=58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c
-VITE_PROOF_SERVER_URL=http://127.0.0.1:6300
-```
-
----
-
-## 📜 License
-
-MIT License. Built for the Midnight Network Developer Community.
+| Network | Status | Contract Address / Details |
+| :--- | :--- | :--- |
+| **Local Devnet** | ✅ Deployed & Verified | Configured via `.midnight-state.json` |
+| **Testnet (Undeployed)** | 🟡 Ready for Deployment | Use `npm run deploy` with Testnet RPC |
+| **GitHub CI/CD** | ✅ 100% Passing | Automated build, Compact compilation & Vitest suite |
