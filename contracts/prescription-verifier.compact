@@ -1,0 +1,29 @@
+pragma language_version >= 0.23;
+
+import CompactStandardLibrary;
+
+export ledger verificationCount: Uint<64>;
+export ledger contractActive: Boolean;
+
+witness prescriptionHash(): Bytes<32>;
+witness doctorSignature(): Bytes<64>;
+
+export circuit verifyPrescription(patientId: Uint<32>): [] {
+    assert(contractActive == true, "Contract is not accepting verifications");
+    const hash = prescriptionHash();
+    const sig  = doctorSignature();
+    const hashFirstByte = hash[0];
+    assert(hashFirstByte != 0x00, "Prescription hash must be non-zero");
+    const sigFirstByte = sig[0];
+    assert(sigFirstByte != 0x00, "Doctor signature must be non-zero");
+    disclose(patientId);
+    verificationCount = (verificationCount + 1) as Uint<64>;
+}
+
+export circuit deactivate(): [] {
+    contractActive = false;
+}
+
+export circuit activate(): [] {
+    contractActive = true;
+}
