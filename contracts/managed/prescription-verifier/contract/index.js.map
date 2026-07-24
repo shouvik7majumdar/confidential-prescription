@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "sourceRoot": "../../../../",
+  "sources": ["contracts/prescription-verifier.compact"],
+  "names": [],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAAA;;;;;;;;;;;;;;;;MAUA,AAAA,kBAUC;;;;;cAViC,WAAmB;;;;;;;;;;;;;;;;;;yCAAnB,WAAmB;;;;;;;;;oDAAnB,WAAmB;;;OAUpD;MAED,AAAA,UAEC;;;;;;;;;;;;;;;;;;;;;;OAAA;MAED,AAAA,QAEC;;;;;;;;;;;;;;;;;;;;;;OAAA;;;;;;;;;;;;GAAC;EA5BF;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IAIA;;;;;;;;;yEAA0C;IAC1C;;;;;;;;;yEAAsC;;;;;;;GAuBpC;EArBF,AAAA,mBAAsC;;0DAAtC,gBAAsC;;;;;;;;;;;;;;GAAA;EACtC,AAAA,kBAAqC;;0DAArC,eAAqC;;;;;;;;;;;;;;GAAA;EAErC,AAAA,qBAUC,4BAViC,WAAmB;oDAC1C;;;;;;;;;;;yHAAc;;;;UACf,MAAyB;UACzB,KAAwB;UACxB,eAAuB,UAAP,MAAI;2CACnB,eAAa;;UACd,cAAqB,UAAN,KAAG;2CACjB,cAAY;;IACV,WAAS;UAClB,KAAiB;;;;;6CAAI;;;;;;;;;;;kHAAiB;;;IAAtC;;;;;;;2HAAA,KAAiB;;yEAAA;;GACpB;EAED,AAAA,aAEC;IADG;;;;;;;;;yEAAc;;GACjB;EAED,AAAA,WAEC;IADG;;;;;;;;;yEAAc;;GACjB;;;;;;;;;;;;;;;;;;;;;;;;IAxBD;qCAAA;;;;;;;;;;;0GAA0C;KAAA;IAC1C;qCAAA;;;;;;;;;;;0GAAsC;KAAA;;;;;;;;;;;;;"
+}

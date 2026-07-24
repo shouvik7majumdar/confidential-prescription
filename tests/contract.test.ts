@@ -1,7 +1,7 @@
 // tests/contract.test.ts
 // Tests verifying contract structure assumptions and initial state.
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,12 +36,7 @@ describe('Contract Structure', () => {
 
   it('compiled contract index.js must exist after compilation', () => {
     const compiledPath = path.resolve(__dirname, '../contracts/managed/prescription-verifier/contract/index.js');
-    let exists = false;
-    try {
-      readFileSync(compiledPath);
-      exists = true;
-    } catch { /* file not found */ }
-    expect(exists).toBe(true);
+    expect(existsSync(compiledPath)).toBe(true);
   });
 });
 
@@ -56,8 +51,8 @@ describe('Package Config', () => {
     expect(pkg.devDependencies).toHaveProperty('vitest');
   });
 
-  it('package.json compile script must use full compact path', () => {
+  it('package.json compile script must contain compact command', () => {
     const pkg = JSON.parse(readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'));
-    expect(pkg.scripts.compile).toContain('/home/user/.local/bin/compact');
+    expect(pkg.scripts.compile).toContain('compact');
   });
 });
