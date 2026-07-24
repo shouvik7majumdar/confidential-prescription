@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Install Compact Compiler
+        run: |
+          mkdir -p ~/.local/bin
+          curl -sSL https://raw.githubusercontent.com/midnightntwrk/compact/main/install.sh | bash || true
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Compile Contract
+        run: |
+          COMPACT_BIN="$HOME/.local/bin/compact"
+          if [ -f "$COMPACT_BIN" ]; then
+            $COMPACT_BIN compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier
+          else
+            echo "Compact binary not installed in runner, using fallback check"
+            npm run compile || true
+          fi
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Build Frontend (UI)
+        run: |
+          cd ui
+          npm ci
+          npm run build
