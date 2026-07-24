@@ -12,16 +12,8 @@ A privacy-preserving smart contract application built on the **Midnight Network*
 
 ## 📸 Application Screenshots
 
-### Landing Page
 ![RxVerify Confidential Prescription Landing Page](docs/images/landing-page.png)
 *RxVerify Landing Page — Glassmorphism Design with Live Zero-Knowledge Metrics & Wallet Integration*
-
-### Application Interface & CI Pipeline
-![RxVerify Confidential Prescription Interface](docs/images/dapp-interface.png)
-*RxVerify User Interface — Real-time ZK Hashing & Prescription Verification*
-
-![CI/CD Pipeline Status](docs/images/ci-pipeline.png)
-*GitHub Actions CI/CD Automated Test & Build Pipeline*
 
 ---
 
