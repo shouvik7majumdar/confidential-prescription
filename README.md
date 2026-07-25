@@ -38,6 +38,14 @@ The Pharmacy Verification Portal allows authorised pharmacies to instantly verif
 
 ---
 
+# 🌐 Live Application
+
+The Confidential Prescription Verification platform is now successfully deployed and publicly accessible. Explore the production application to experience privacy-preserving prescription issuance, Zero-Knowledge verification, authorised doctor workflows, and confidential healthcare credential management powered by Midnight Protocol.
+
+▶ **[Open the Live Application](https://confidential-prescriptionnn.vercel.app/)**
+
+---
+
 # 🎥 Live Demo
 
 Watch the complete demonstration of the Confidential Prescription Verification Platform built on Midnight Protocol. The demonstration showcases confidential prescription issuance, doctor identity verification, pharmacy verification through Zero-Knowledge Proofs, healthcare telemetry, and privacy-preserving credential management powered by Compact smart contracts.
@@ -74,13 +82,16 @@ On public transparent blockchains, this data creates immutable, searchable logs 
 
 # Key Features
 
-- **Doctor Identity Verification**: Digital signing of confidential credentials using public-key cryptography to prove doctor authorization and prescription integrity without revealing text.
-- **Automated Prescription Expiry**: Real-time evaluation of issue and expiry dates with dynamic status badges (`Valid`, `Expired`, `Expires in X Days`).
-- **Instant QR Code Verification**: QR payload encoding and scanning in the Pharmacy Portal for fast verification.
-- **Prescription Revocation**: Prescribers can revoke active credentials, triggering immediate ZK proof rejection (`Prescription Revoked`).
+- **Confidential Prescription Issuance**: Doctor Portal enables authorized prescribers to issue digitally signed confidential prescriptions without publishing text or diagnostic data.
+- **Zero-Knowledge Verification**: Prescriptions are verified on-chain via zk-SNARK proofs generated through Midnight Protocol confidential execution.
+- **Doctor Digital Signatures**: Public-key cryptographic signatures guarantee prescriber authenticity and prescription data integrity.
 - **Hospital Allowlist Registry**: Certified network allowlist (St. Jude Healthcare Network, Metro General Hospital, Apex Medical Center) and approved prescriber directory.
-- **Pharmacy Verification Portal**: Dedicated workspace for licensed pharmacies to evaluate ZK proof validity, expiry status, and hospital authorization.
-- **Patient Management Dashboard**: Multi-prescription card view allowing patients to view credentials, execute Midnight ZK proofs, generate QR codes, and create temporary sharing links.
+- **QR-Based Verification**: Fast QR payload encoding and scanning in the Pharmacy Verification Portal for touchless credential verification.
+- **Prescription Revocation**: Prescribers can revoke active credentials, triggering immediate ZK proof rejection (`Prescription Revoked`).
+- **Pharmacy Verification Portal**: Dedicated workspace for licensed pharmacies to evaluate ZK proof validity, expiry status, and hospital authorization without PHI exposure.
+- **Midnight Protocol Confidential Execution**: Private-by-default execution maintaining strict state boundaries using `disclose()` in Compact smart contracts.
+- **Compact Smart Contracts**: On-chain verification circuits built with Compact v0.31 and Midnight Standard Library.
+- **Responsive React Frontend**: Modern glassmorphic user interface built with React 19, Vite 8, TypeScript 6, and Vanilla CSS.
 - **Anonymous Temporary Proof Sharing**: Time-bound ZK proof tokens (configurable for 15m, 1h, 24h) with self-expiring timers for third-party verification without wallet connections.
 - **Telemetry Analytics Dashboard**: Live metrics for Total Issued, On-Chain Verifications (ZK), Expired, Revoked, Active Doctors, Approved Hospitals, and Proof Throughput.
 
