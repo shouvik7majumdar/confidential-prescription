@@ -74,7 +74,8 @@ export function PrescriptionVerifier({ wallet, contractAddress, network, onVerif
 
       // In production: call the Midnight contract via the proof server
       // For local demo: simulate the transaction
-      if (!contractAddress) {
+      const activeContractAddress = contractAddress || '58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c';
+      if (!activeContractAddress) {
         throw new Error('VITE_CONTRACT_ADDRESS not set. Deploy first and update .env.local');
       }
 

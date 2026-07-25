@@ -148,7 +148,7 @@ function App() {
   };
 
   const network = import.meta.env.VITE_NETWORK || 'undeployed';
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '';
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
