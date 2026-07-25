@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier || $HOME/.local/bin/compact compile contracts/prescription-verifier.compact contracts/managed/prescription-verifier",
-    "build": "npx tsc --noEmit || true",
+    "build": "cd ui && npm install && npm run build",
     "setup": "npx tsx src/setup.ts",
     "deploy": "npx tsx src/deploy.ts",
     "cli": "npx tsx src/cli.ts",
