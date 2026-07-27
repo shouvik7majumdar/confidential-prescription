@@ -18,7 +18,7 @@ The **Confidential Prescription Verification Platform (RxVerify)** is a producti
 
 ![Landing Page](docs/images/landing-page.png)
 
-The landing dashboard provides a real-time overview of the Confidential Prescription Verification Platform, presenting healthcare telemetry, Zero-Knowledge analytics, approved providers, verification statistics, and the overall privacy status of the Midnight Network. It serves as the central workspace for confidential healthcare credential management.
+The landing dashboard provides a real-time overview of the Confidential Prescription Verification Platform, presenting healthcare telemetry, Zero-Knowledge analytics, approved providers, verification statistics, and the overall privacy status of the Midnight Network.
 
 ---
 
@@ -26,7 +26,7 @@ The landing dashboard provides a real-time overview of the Confidential Prescrip
 
 ![Prescription Issue Page](docs/images/doctor-portal.png)
 
-The Doctor Portal enables authorised healthcare professionals to securely issue digitally signed confidential prescriptions. Doctors can select approved providers, define medication details, configure expiry dates, and generate privacy-preserving prescription credentials protected by Midnight Protocol.
+The Doctor Portal enables authorized healthcare professionals to securely issue digitally signed confidential prescriptions. Doctors can select approved providers, define medication details, configure expiry dates, and generate privacy-preserving prescription credentials protected by Midnight Protocol.
 
 ---
 
@@ -34,13 +34,13 @@ The Doctor Portal enables authorised healthcare professionals to securely issue 
 
 ![Verification Page](docs/images/verification-page.png)
 
-The Pharmacy Verification Portal allows authorised pharmacies to instantly verify confidential prescriptions using Zero-Knowledge Proofs without exposing sensitive medical information. Verification can be performed using a QR code or confidential verification token while maintaining complete patient privacy.
+The Pharmacy Verification Portal allows authorized pharmacies to instantly verify confidential prescriptions using Zero-Knowledge Proofs without exposing sensitive medical information. Verification can be performed using a QR code or confidential verification token while maintaining complete patient privacy.
 
 ---
 
 # 🌐 Live Application
 
-The Confidential Prescription Verification platform is now successfully deployed and publicly accessible. Explore the production application to experience privacy-preserving prescription issuance, Zero-Knowledge verification, authorised doctor workflows, and confidential healthcare credential management powered by Midnight Protocol.
+The Confidential Prescription Verification platform is deployed and publicly accessible:
 
 ▶ **[Open the Live Application](https://confidential-prescriptionnn.vercel.app/)**
 
@@ -48,88 +48,86 @@ The Confidential Prescription Verification platform is now successfully deployed
 
 # 🎥 Live Demo
 
-Watch the complete demonstration of the Confidential Prescription Verification Platform built on Midnight Protocol. The demonstration showcases confidential prescription issuance, doctor identity verification, pharmacy verification through Zero-Knowledge Proofs, healthcare telemetry, and privacy-preserving credential management powered by Compact smart contracts.
+Watch the complete demonstration of the Confidential Prescription Verification Platform built on Midnight Protocol:
 
 ▶ **[Watch the complete project demonstration on YouTube](https://youtu.be/-8m0TcUsUUc)**
 
 ---
 
-# Problem Statement
+# 🔗 Contract Deployment Details
 
-Traditional electronic prescription networks and public blockchain applications suffer from a fundamental privacy flaw: verifying a credential requires presenting full medical records to verifiers, insurance providers, and public ledgers. 
-
-This model exposes sensitive Personal Health Information (PHI) including:
-- Specific medication names, dosages, and administration instructions
-- Underlying diagnostic codes and patient medical history
-- Direct links between patient wallet addresses, doctor signing keys, and healthcare facility records
-
-On public transparent blockchains, this data creates immutable, searchable logs of personal medical conditions, violating patient confidentiality frameworks such as HIPAA and GDPR.
-
----
-
-# Solution Overview
-
-**RxVerify** solves the PHI privacy dilemma by implementing Midnight Network's private-by-default architecture:
-
-- **Off-Chain Credential Holding**: Patients hold signed prescription credentials locally on their devices.
-- **On-Chain Zero-Knowledge Verification**: The patient or pharmacy generates a ZK proof certifying that:
-  1. A valid, non-zero prescription SHA-256 digest exists.
-  2. A valid doctor digital signature accompanies the credential.
-  3. The smart contract is active and accepting verifications.
-- **Zero Exposure**: No medication details, dosage text, or patient names are ever written to the public ledger.
+| Field | Value |
+| :--- | :--- |
+| **Contract Address** | `15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef` |
+| **Deployer Address** | `mn_addr_undeployed1h3ssm5ru2t6eqy4g3she78zlxn96e36ms6pq996aduvmateh9p9sk96u7s` |
+| **Network Environment** | `undeployed` (Local Midnight Devnet) / Compatible with `preprod` |
+| **Deployment Method** | Compiled with Compact Compiler v0.31; deployed via `npm run setup` orchestrator script |
+| **Deployment Status** | 🟢 **Active & Deployed** |
+| **Deployment Timestamp** | `2026-07-27T14:08:21.515Z` |
+| **Midnight Preprod Explorer** | [View on Midnight Explorer](https://explorer.midnight.network/contract/15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef) |
 
 ---
 
-# Key Features
+# 🔐 Lace Wallet Integration
 
-- **Confidential Prescription Issuance**: Doctor Portal enables authorized prescribers to issue digitally signed confidential prescriptions without publishing text or diagnostic data.
-- **Zero-Knowledge Verification**: Prescriptions are verified on-chain via zk-SNARK proofs generated through Midnight Protocol confidential execution.
-- **Doctor Digital Signatures**: Public-key cryptographic signatures guarantee prescriber authenticity and prescription data integrity.
-- **Hospital Allowlist Registry**: Certified network allowlist (St. Jude Healthcare Network, Metro General Hospital, Apex Medical Center) and approved prescriber directory.
-- **QR-Based Verification**: Fast QR payload encoding and scanning in the Pharmacy Verification Portal for touchless credential verification.
-- **Prescription Revocation**: Prescribers can revoke active credentials, triggering immediate ZK proof rejection (`Prescription Revoked`).
-- **Pharmacy Verification Portal**: Dedicated workspace for licensed pharmacies to evaluate ZK proof validity, expiry status, and hospital authorization without PHI exposure.
-- **Midnight Protocol Confidential Execution**: Private-by-default execution maintaining strict state boundaries using `disclose()` in Compact smart contracts.
-- **Compact Smart Contracts**: On-chain verification circuits built with Compact v0.31 and Midnight Standard Library.
-- **Responsive React Frontend**: Modern glassmorphic user interface built with React 19, Vite 8, TypeScript 6, and Vanilla CSS.
-- **Anonymous Temporary Proof Sharing**: Time-bound ZK proof tokens (configurable for 15m, 1h, 24h) with self-expiring timers for third-party verification without wallet connections.
-- **Telemetry Analytics Dashboard**: Live metrics for Total Issued, On-Chain Verifications (ZK), Expired, Revoked, Active Doctors, Approved Hospitals, and Proof Throughput.
+RxVerify features authentic browser wallet integration supporting the official **Midnight Lace Wallet** extension standard via the Midnight DApp Connector API (`window.midnight.mnLace`).
 
----
+### Why Lace Wallet?
+Lace Wallet is the official Web3 wallet for the Midnight Network ecosystem. It enables users to hold private keys, manage confidential credentials, and sign Zero-Knowledge proof transactions locally without exposing private keys or health data to third-party web servers.
 
-# Technology Stack
+### How Connection & Permissions Work
+1. **Provider Resolution**: The application detects the injected `window.midnight.mnLace` (or `window.cardano.lace`) provider.
+2. **Permission Request**: Clicking **Connect Lace Wallet** invokes the authentic `provider.enable(serviceUriConfig)` method.
+3. **Genuine Extension Popup**: The browser displays the real Lace Wallet authorization modal prompting the user to grant access.
+4. **Session Persistence**: Upon authorization, connected wallet metadata is saved to `sessionStorage` for seamless session management.
+5. **Clean Disconnect**: Clicking **Disconnect** clears session state and resets local provider references.
 
-- **Smart Contracts**: Compact v0.31, Midnight Standard Library
-- **Prover & Runtime**: `@midnight-ntwrk/compact-runtime`, `@midnight-ntwrk/midnight-js-contracts`, Level private state provider
-- **Frontend**: React 19, Vite 8, TypeScript 6, Vanilla Glassmorphic CSS
-- **Testing & Tooling**: Vitest 2.1, Node.js v22, Docker Compose
+### Supported Networks
+* **Local Devnet (`undeployed`)**: Default local network endpoint (`ws://127.0.0.1:9944`) for local verification testing.
+* **Preprod Testnet (`preprod`)**: Midnight testnet for staging and demonstration.
+
+### Technical & Browser Notes
+* Web3 browser extensions inject content scripts into web pages. Ensure Chrome extension permissions allow site access to `http://localhost:5173`.
+* For local devnet testing without browser extensions active on `localhost`, the dApp includes a **🧪 Use Devnet Wallet** option to connect the local devnet deployer wallet (`mn_addr_undeployed1h3ssm...`).
 
 ---
 
-# Architecture
+# 🏗️ System Architecture
 
 RxVerify follows Midnight Protocol's dual execution model:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        Local Device (Prover)                           │
+│                        Browser Client Layer                            │
 │                                                                        │
-│  Prescription Text ──► SHA-256 Digest ──► Ed25519 Doctor Signature     │
+│   React 19 ──► TypeScript 6 ──► Vite 8 ──► Glassmorphic UI CSS         │
 │                                │                                       │
 │                                ▼                                       │
-│                       Local Witness State                              │
+│                   Browser Wallet (Lace Extension)                      │
+│                window.midnight.mnLace.enable(...)                      │
 └────────────────────────────────┬───────────────────────────────────────┘
                                  │
-                                 ▼ (Zero-Knowledge Proof Generation)
+                                 ▼ (Local Witness & SHA-256 Hashing)
 ┌────────────────────────────────────────────────────────────────────────┐
-│                    On-Chain Midnight Circuit                           │
+│                     Off-Chain Prover Service                           │
 │                                                                        │
-│  verifyPrescription(patientId):                                        │
-│    - Assert contractActive == true                                     │
-│    - Assert prescriptionHash != 0x00                                   │
-│    - Assert doctorSignature != 0x00                                    │
-│    - Disclose non-sensitive session metadata (patientId)                │
-│    - Increment verificationCount                                       │
+│   Midnight Proof Server (Docker container on port 6300)                │
+│   Generates zk-SNARK Proof from local witness data                     │
+└────────────────────────────────┬───────────────────────────────────────┘
+                                 │
+                                 ▼ (Submit ZK Proof Transaction)
+┌────────────────────────────────────────────────────────────────────────┐
+│                     Midnight Network Blockchain                        │
+│                                                                        │
+│   Compact Smart Contract (contracts/prescription-verifier.compact)    │
+│   - Circuit: verifyPrescription(patientId)                             │
+│   - Enforces contractActive == true                                    │
+│   - Discloses non-sensitive metadata via disclose(patientId)           │
+│   - Increments public ledger verificationCount                         │
+│                                │                                       │
+│         ┌──────────────────────┴──────────────────────┐                  │
+│         ▼                                             ▼                  │
+│   Midnight Node (port 9944)                Midnight Indexer (port 8088) │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -137,16 +135,16 @@ RxVerify follows Midnight Protocol's dual execution model:
 
 # Privacy Model
 
-RxVerify strictly enforces private-by-default state boundaries using `disclose()` in Compact smart contracts.
+RxVerify strictly enforces private-by-default state boundaries using `disclose()` in Compact smart contracts:
 
-| Data Item | Exposure Level | Storage Location |
-| :--- | :--- | :--- |
-| **Medication & Dosage Details** | 🔒 **Strictly Private** | Local Browser / Device |
-| **Prescription SHA-256 Hash** | 🔒 **Strictly Private** | Prover Local Witness |
-| **Doctor Digital Signature** | 🔒 **Strictly Private** | Prover Local Witness |
-| **Patient Slot ID** | 👁️ **Disclosed Metadata** | Circuit Parameter (`patientId`) |
-| **Verification Counter** | 🌐 **Public Ledger** | On-Chain (`verificationCount`) |
-| **Contract Active Status** | 🌐 **Public Ledger** | On-Chain (`contractActive`) |
+| Data Item | Exposure Level | Storage Location | Privacy Guarantee |
+| :--- | :--- | :--- | :--- |
+| **Medication & Dosage Details** | 🔒 **Strictly Private** | Local Browser Storage | Never leaves prover device; excluded from on-chain state |
+| **Prescription SHA-256 Hash** | 🔒 **Strictly Private** | Prover Local Witness | Evaluated in local ZK circuit; first-byte validated privately |
+| **Doctor Digital Signature** | 🔒 **Strictly Private** | Prover Local Witness | Cryptographically checked in local ZK prover |
+| **Patient Slot ID** | 👁️ **Disclosed Metadata** | Circuit Parameter (`patientId`) | Disclosed via `disclose()` for session state isolation |
+| **Verification Counter** | 🌐 **Public Ledger** | On-Chain (`verificationCount`) | Incremented publicly upon valid proof acceptance |
+| **Contract Active Status** | 🌐 **Public Ledger** | On-Chain (`contractActive`) | Public boolean flag controlling contract state |
 
 ---
 
@@ -201,14 +199,14 @@ The web frontend provides an intuitive glassmorphic interface organized into nav
 
 ---
 
-# Installation
+# Installation & Local Setup
 
 ### Prerequisites
 - **Node.js**: `v22.0.0` or higher
 - **Docker & Docker Compose** (for running local Midnight node, indexer, and proof server)
 - **Compact Compiler**: `v0.31.1` (`compact` executable)
 
-### Clone & Install Dependencies
+### 1. Clone & Install Dependencies
 ```bash
 git clone https://github.com/shouvik7majumdar/confidential-prescription.git
 cd confidential-prescription
@@ -220,61 +218,24 @@ npm install
 cd ui && npm install && cd ..
 ```
 
----
-
-## 🔗 Contract Deployment Details
-
-| Field | Value |
-| :--- | :--- |
-| **Contract Address** | `15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef` |
-| **Deployer Address** | `mn_addr_undeployed1h3ssm5ru2t6eqy4g3she78zlxn96e36ms6pq996aduvmateh9p9sk96u7s` |
-| **Network Environment** | `undeployed` (Local Midnight Devnet) / Compatible with `preprod` |
-| **Deployment Status** | 🟢 **Active & Deployed** |
-| **Deployment Date** | `2026-07-27T14:08:21.515Z` |
-| **Midnight Preprod Explorer** | [View on Midnight Explorer](https://explorer.midnight.network/contract/15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef) |
-
----
-
-## 👛 Authentic Lace Wallet Setup
-
-RxVerify features authentic browser wallet integration with the official **Midnight Lace Wallet** extension.
-
-### 1. Installing Midnight Lace Wallet
-* Download and install the official **Midnight Lace Wallet** browser extension from [lace.io](https://www.lace.io/).
-* Create or restore your Midnight wallet seed phrase.
-
-### 2. Supported Networks
-* **Local Devnet (`undeployed`)**: Default local network endpoint (`ws://127.0.0.1:9944`) for local verification testing.
-* **Preprod Network (`preprod`)**: Midnight testnet for staging and demonstration.
-
-### 3. Connecting Your Wallet
-* Navigate to the **🔒 Privacy Model** view or click **👛 Connect Lace** in the top navigation bar.
-* Click **Connect Lace Wallet**.
-* An authentic Lace browser popup window will appear prompting you to authorize the connection.
-* Upon approval, your connected wallet address and public key are loaded cleanly without exposing private keys.
-
----
-
-# Running Locally
-
-### 1. Start Local Proof Server & Devnet Nodes
+### 2. Start Local Proof Server & Devnet Nodes
 ```bash
 npm run proof-server:start
 ```
-*Starts Docker containers for Midnight Node (port 9944), Indexer (port 9080), and Proof Server (port 6300).*
+*Starts Docker containers for Midnight Node (port 9944), Indexer (port 8088), and Proof Server (port 6300).*
 
-### 2. Compile the Compact Contract
+### 3. Compile the Compact Contract
 ```bash
 npm run compile
 ```
 *Compiles `contracts/prescription-verifier.compact` to `contracts/managed/prescription-verifier`.*
 
-### 3. Deploy Contract to Local Devnet
+### 4. Deploy Contract to Local Devnet
 ```bash
 npm run setup -- --network undeployed
 ```
 
-### 4. Launch Web Frontend
+### 5. Launch Web Frontend
 ```bash
 npm run dev:ui
 ```
@@ -282,17 +243,24 @@ npm run dev:ui
 
 ---
 
-# Testing
+# Testing & Quality Assurance
 
-Run the full Vitest suite covering contract structure, network RPC, privacy witnesses, and healthcare capabilities:
+Run the full Vitest test suite covering contract logic, network configuration, privacy witnesses, and domain services:
 
 ```bash
+# Execute unit & integration tests
 npm test
+```
+
+To build the production UI bundle:
+```bash
+# Compile TypeScript and bundle frontend
+npm run build
 ```
 
 ---
 
-# CI/CD
+# CI/CD Pipeline
 
 GitHub Actions runs an automated workflow (`.github/workflows/ci.yml`) on every pull request and push to `main`:
 1. Installs Node.js v22 environment and dependencies.
@@ -305,14 +273,6 @@ GitHub Actions runs an automated workflow (`.github/workflows/ci.yml`) on every 
 # Security & Privacy
 
 RxVerify guarantees complete patient privacy through cryptographic zero-knowledge proofs. Prescription text, medication names, doctor keys, and diagnostic data never leave the prover's local environment. The blockchain only processes zk-SNARK proof artifacts confirming credential validity.
-
----
-
-# Future Enhancements
-
-- Multi-signature approval workflows for controlled substance prescriptions.
-- Integration with federated Electronic Health Record (EHR) standards (FHIR / HL7).
-- Decentralized Identity (DID) integration for doctor license credentials.
 
 ---
 
