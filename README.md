@@ -38,6 +38,14 @@ The Pharmacy Verification Portal allows authorized pharmacies to instantly verif
 
 ---
 
+## Privacy Model & Wallet Verification Page
+
+![Privacy Model & Wallet Verification](docs/images/wallet-connected.png)
+
+The Privacy Model workspace displays the connected Midnight wallet address, active public ledger contract state (`verificationCount`, `contractActive`), and real-time zero-knowledge prescription proof verification status.
+
+---
+
 # 🌐 Live Application
 
 The Confidential Prescription Verification platform is deployed and publicly accessible:
