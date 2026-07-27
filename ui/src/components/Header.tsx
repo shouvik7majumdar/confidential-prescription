@@ -75,13 +75,21 @@ export function Header({ network, wallet, activeTab, onSelectTab, onDisconnect }
               <span style={{ color: dotColor, fontWeight: 500 }}>{network}</span>
             </div>
 
-            {wallet && (
+            {wallet ? (
               <button
                 id="wallet-disconnect-btn"
                 className="btn btn-sm btn-outline"
                 onClick={onDisconnect}
               >
                 Disconnect
+              </button>
+            ) : (
+              <button
+                id="header-connect-btn"
+                className="btn btn-sm btn-primary"
+                onClick={() => onSelectTab('privacy')}
+              >
+                👛 Connect Lace
               </button>
             )}
           </div>

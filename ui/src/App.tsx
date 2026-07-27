@@ -17,7 +17,24 @@ import type { Prescription, VerificationLog } from '../../src/healthcare-service
 import { AUTHORIZED_DOCTORS, AUTHORIZED_HOSPITALS } from '../../src/healthcare-services';
 
 function App() {
-  const [wallet, setWallet] = useState<WalletState | null>(null);
+  const [wallet, setWallet] = useState<WalletState | null>(() => {
+    try {
+      const saved = sessionStorage.getItem('rxverify_wallet');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleSetWallet = useCallback((w: WalletState | null) => {
+    setWallet(w);
+    if (w) {
+      sessionStorage.setItem('rxverify_wallet', JSON.stringify(w));
+    } else {
+      sessionStorage.removeItem('rxverify_wallet');
+    }
+  }, []);
+
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [verificationCount, setVerificationCount] = useState<bigint | null>(null);
   const [contractActive, setContractActive] = useState<boolean | null>(null);
@@ -157,7 +174,7 @@ function App() {
         wallet={wallet}
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        onDisconnect={() => setWallet(null)}
+        onDisconnect={() => handleSetWallet(null)}
       />
 
       <main className="main-content">
@@ -235,8 +252,8 @@ function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   <WalletConnect
                     wallet={wallet}
-                    onConnect={setWallet}
-                    onDisconnect={() => setWallet(null)}
+                    onConnect={handleSetWallet}
+                    onDisconnect={() => handleSetWallet(null)}
                     onError={(msg) => addToast(msg, 'error')}
                   />
                   <LedgerState

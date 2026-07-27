@@ -19,7 +19,9 @@ import { prescriptionWitnesses, emptyPrivateState } from './prescription-witness
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const zkConfigPath = path.resolve(__dirname, '../contracts/managed/prescription-verifier');
 
-const { Contract } = await import(path.join(zkConfigPath, 'contract/index.js')) as any;
+import { pathToFileURL } from 'node:url';
+const contractUrl = pathToFileURL(path.join(zkConfigPath, 'contract/index.js')).href;
+const { Contract } = await import(contractUrl) as any;
 
 const compiledContract = (CompiledContract as any).withCompiledFileAssets(
   (CompiledContract as any).withWitnesses((CompiledContract as any).make('prescription-verifier', Contract), prescriptionWitnesses),

@@ -222,6 +222,39 @@ cd ui && npm install && cd ..
 
 ---
 
+## 🔗 Contract Deployment Details
+
+| Field | Value |
+| :--- | :--- |
+| **Contract Address** | `15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef` |
+| **Deployer Address** | `mn_addr_undeployed1h3ssm5ru2t6eqy4g3she78zlxn96e36ms6pq996aduvmateh9p9sk96u7s` |
+| **Network Environment** | `undeployed` (Local Midnight Devnet) / Compatible with `preprod` |
+| **Deployment Status** | 🟢 **Active & Deployed** |
+| **Deployment Date** | `2026-07-27T14:08:21.515Z` |
+| **Midnight Preprod Explorer** | [View on Midnight Explorer](https://explorer.midnight.network/contract/15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef) |
+
+---
+
+## 👛 Authentic Lace Wallet Setup
+
+RxVerify features authentic browser wallet integration with the official **Midnight Lace Wallet** extension.
+
+### 1. Installing Midnight Lace Wallet
+* Download and install the official **Midnight Lace Wallet** browser extension from [lace.io](https://www.lace.io/).
+* Create or restore your Midnight wallet seed phrase.
+
+### 2. Supported Networks
+* **Local Devnet (`undeployed`)**: Default local network endpoint (`ws://127.0.0.1:9944`) for local verification testing.
+* **Preprod Network (`preprod`)**: Midnight testnet for staging and demonstration.
+
+### 3. Connecting Your Wallet
+* Navigate to the **🔒 Privacy Model** view or click **👛 Connect Lace** in the top navigation bar.
+* Click **Connect Lace Wallet**.
+* An authentic Lace browser popup window will appear prompting you to authorize the connection.
+* Upon approval, your connected wallet address and public key are loaded cleanly without exposing private keys.
+
+---
+
 # Running Locally
 
 ### 1. Start Local Proof Server & Devnet Nodes
