@@ -4,7 +4,7 @@ export function getLaceWalletProvider(): any {
   if (typeof window === 'undefined') return null;
   const win = window as any;
 
-  // 1. Midnight namespace
+  // 1. Official Midnight Lace Extension (window.midnight)
   if (win.midnight) {
     if (win.midnight.mnLace) return win.midnight.mnLace;
     if (win.midnight.lace) return win.midnight.lace;
@@ -15,10 +15,10 @@ export function getLaceWalletProvider(): any {
     }
   }
 
-  // 2. Cardano namespace
+  // 2. Cardano Lace Extension (window.cardano)
   if (win.cardano) {
-    if (win.cardano.lace) return win.cardano.lace;
     if (win.cardano.mnLace) return win.cardano.mnLace;
+    if (win.cardano.lace) return win.cardano.lace;
     if (typeof win.cardano.enable === 'function') return win.cardano;
     for (const key of Object.keys(win.cardano)) {
       if (win.cardano[key] && typeof win.cardano[key].enable === 'function') {
@@ -27,11 +27,11 @@ export function getLaceWalletProvider(): any {
     }
   }
 
-  // 3. Root window properties
+  // 3. Root Window Objects
   if (win.mnLace && typeof win.mnLace.enable === 'function') return win.mnLace;
   if (win.lace && typeof win.lace.enable === 'function') return win.lace;
 
-  // 4. Scan all window properties for any injected wallet provider
+  // 4. Global Property Search
   try {
     const keys = Object.getOwnPropertyNames(win);
     for (const prop of keys) {
@@ -51,30 +51,46 @@ export function getLaceWalletProvider(): any {
 export async function requestLaceConnection(): Promise<WalletState> {
   let provider = getLaceWalletProvider();
 
-  // If not immediately found, wait 500ms in case content script is injecting
+  // Polling wait for asynchronously injected content scripts
   if (!provider && typeof window !== 'undefined') {
-    await new Promise(r => setTimeout(r, 500));
-    provider = getLaceWalletProvider();
+    for (let i = 0; i < 5; i++) {
+      await new Promise(r => setTimeout(r, 200));
+      provider = getLaceWalletProvider();
+      if (provider) break;
+    }
   }
 
   if (!provider) {
     throw new Error(
-      'Lace Wallet extension was not detected on localhost:5173. Please ensure the Lace extension has site access enabled in Chrome (click the extension icon in toolbar -> Allow site access).'
+      'Midnight Lace Wallet extension was not detected on localhost:5173. Please install the Midnight Lace Wallet preview extension and ensure Chrome extension site permissions allow access to localhost.'
     );
   }
+
+  // Midnight DApp Connector Service URI configuration
+  const serviceUriConfig = {
+    indexer: 'http://127.0.0.1:8088/api/v4/graphql',
+    indexerWS: 'ws://127.0.0.1:8088/api/v4/graphql/ws',
+    node: 'ws://127.0.0.1:9944',
+    proofServer: 'http://127.0.0.1:6300',
+  };
 
   // Trigger authentic Lace wallet permission popup in browser
   let enabledApi: any;
   try {
-    enabledApi = await provider.enable();
+    // Attempt calling enable with Midnight serviceUriConfig first, fallback to no args for standard CIP-30
+    try {
+      enabledApi = await provider.enable(serviceUriConfig);
+    } catch {
+      enabledApi = await provider.enable();
+    }
   } catch (err) {
     throw new Error(
-      'Connection request failed in Lace Wallet: ' + (err instanceof Error ? err.message : String(err))
+      'Wallet connection request was cancelled or declined in Lace: ' + (err instanceof Error ? err.message : String(err))
     );
   }
 
   if (!enabledApi) {
-    throw new Error('Connection request returned empty response from Lace Wallet.');
+    throw new Error('Wallet connection returned empty API instance from Lace.');
   }
 
   let address = '';
@@ -89,17 +105,17 @@ export async function requestLaceConnection(): Promise<WalletState> {
       coinPublicKey = state?.coinPublicKey || '';
       networkId = state?.networkId || networkId;
     } catch (e) {
-      console.warn('enabledApi.state() call failed:', e);
+      console.warn('enabledApi.state() call:', e);
     }
   }
 
-  // 2. Cardano CIP-30 / Lace API format
+  // 2. Cardano CIP-30 API format
   if (!address && typeof enabledApi.getUsedAddresses === 'function') {
     try {
       const addrs = await enabledApi.getUsedAddresses();
       if (addrs && addrs.length > 0) address = addrs[0];
     } catch (e) {
-      console.warn('getUsedAddresses call failed:', e);
+      console.warn('getUsedAddresses call:', e);
     }
   }
 
@@ -108,7 +124,7 @@ export async function requestLaceConnection(): Promise<WalletState> {
       const addrs = await enabledApi.getUnusedAddresses();
       if (addrs && addrs.length > 0) address = addrs[0];
     } catch (e) {
-      console.warn('getUnusedAddresses call failed:', e);
+      console.warn('getUnusedAddresses call:', e);
     }
   }
 
