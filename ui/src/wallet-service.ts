@@ -4,7 +4,7 @@ export function getLaceWalletProvider(): any {
   if (typeof window === 'undefined') return null;
   const win = window as any;
 
-  // 1. Check window.midnight namespace (Midnight Lace Extension)
+  // 1. Midnight namespace
   if (win.midnight) {
     if (win.midnight.mnLace) return win.midnight.mnLace;
     if (win.midnight.lace) return win.midnight.lace;
@@ -15,7 +15,7 @@ export function getLaceWalletProvider(): any {
     }
   }
 
-  // 2. Check window.cardano namespace (Standard Lace Extension)
+  // 2. Cardano namespace
   if (win.cardano) {
     if (win.cardano.lace) return win.cardano.lace;
     if (win.cardano.mnLace) return win.cardano.mnLace;
@@ -27,19 +27,39 @@ export function getLaceWalletProvider(): any {
     }
   }
 
-  // 3. Check root window properties
+  // 3. Root window properties
   if (win.mnLace && typeof win.mnLace.enable === 'function') return win.mnLace;
   if (win.lace && typeof win.lace.enable === 'function') return win.lace;
+
+  // 4. Scan all window properties for any injected wallet provider
+  try {
+    const keys = Object.getOwnPropertyNames(win);
+    for (const prop of keys) {
+      const lower = prop.toLowerCase();
+      if (lower.includes('lace') || lower.includes('midnight') || lower.includes('cardano')) {
+        const obj = win[prop];
+        if (obj && typeof obj.enable === 'function') {
+          return obj;
+        }
+      }
+    }
+  } catch (e) {}
 
   return null;
 }
 
 export async function requestLaceConnection(): Promise<WalletState> {
-  const provider = getLaceWalletProvider();
+  let provider = getLaceWalletProvider();
+
+  // If not immediately found, wait 500ms in case content script is injecting
+  if (!provider && typeof window !== 'undefined') {
+    await new Promise(r => setTimeout(r, 500));
+    provider = getLaceWalletProvider();
+  }
 
   if (!provider) {
     throw new Error(
-      'Lace Wallet extension was not detected. Please ensure your Lace Wallet extension is active and has access to this page.'
+      'Lace Wallet extension was not detected on localhost:5173. Please ensure the Lace extension has site access enabled in Chrome (click the extension icon in toolbar -> Allow site access).'
     );
   }
 

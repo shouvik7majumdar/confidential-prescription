@@ -13,11 +13,13 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLaceInstalled, setIsLaceInstalled] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const checkLace = () => {
-      setIsLaceInstalled(Boolean(getLaceWalletProvider()));
-    };
+  const checkLace = () => {
+    const provider = getLaceWalletProvider();
+    setIsLaceInstalled(Boolean(provider));
+    return Boolean(provider);
+  };
 
+  useEffect(() => {
     checkLace();
     const interval = setInterval(checkLace, 1000);
     return () => clearInterval(interval);
@@ -36,6 +38,16 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
     }
   };
 
+  const connectDevnetFallback = () => {
+    const devnetWallet: WalletState = {
+      address: 'mn_addr_undeployed1h3ssm5ru2t6eqy4g3she78zlxn96e36ms6pq996aduvmateh9p9sk96u7s',
+      coinPublicKey: '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      network: import.meta.env.VITE_NETWORK || 'undeployed',
+      isConnected: true,
+    };
+    onConnect(devnetWallet);
+  };
+
   if (!wallet) {
     return (
       <div className="card animate-slide-up">
@@ -45,10 +57,14 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
         </div>
 
         {isLaceInstalled === false && (
-          <div className="alert alert-error mb-4" style={{ marginBottom: '20px' }}>
+          <div className="alert alert-warning mb-4" style={{ marginBottom: '20px' }}>
             <span className="alert-icon">⚠️</span>
             <div>
-              <strong>Lace Wallet Not Detected:</strong> Midnight Lace Wallet extension was not found in your browser. Please install the extension to connect.
+              <strong>Lace Extension Status:</strong> Lace wallet was not automatically detected on this tab.
+              <br />
+              <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block' }}>
+                If Lace is open in your side panel, make sure to click the puzzle icon in Chrome to allow extension access to <code>localhost:5173</code>.
+              </span>
             </div>
           </div>
         )}
@@ -61,18 +77,42 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
           </div>
         </div>
 
-        <button
-          id="wallet-connect-btn"
-          className="btn btn-primary btn-lg w-full"
-          onClick={connect}
-          disabled={isConnecting}
-        >
-          {isConnecting ? (
-            <><span className="spinner" style={{ borderTopColor: 'white' }} /> Awaiting Lace Approval...</>
-          ) : (
-            <><span>💊</span> Connect Lace Wallet</>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button
+            id="wallet-connect-btn"
+            className="btn btn-primary btn-lg w-full"
+            onClick={connect}
+            disabled={isConnecting}
+          >
+            {isConnecting ? (
+              <><span className="spinner" style={{ borderTopColor: 'white' }} /> Awaiting Lace Approval...</>
+            ) : (
+              <><span>💊</span> Connect Lace Wallet</>
+            )}
+          </button>
+
+          {isLaceInstalled === false && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '6px' }}>
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={() => {
+                  const found = checkLace();
+                  if (found) connect();
+                  else onError('Lace not detected on window object yet. Check extension site permissions in Chrome.');
+                }}
+              >
+                🔄 Re-scan Extension
+              </button>
+
+              <button
+                className="btn btn-secondary btn-sm"
+                onClick={connectDevnetFallback}
+              >
+                🧪 Use Devnet Wallet
+              </button>
+            </div>
           )}
-        </button>
+        </div>
 
         <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)' }}>
           <a
@@ -92,7 +132,7 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
     <div className="card animate-fade-in">
       <div className="card-title">
         <span className="card-title-icon">✅</span>
-        Lace Wallet Connected
+        Wallet Connected
       </div>
 
       <div className="wallet-section">
@@ -106,7 +146,7 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
             <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Network</div>
             <div style={{ fontWeight: 600, color: 'var(--accent-teal)' }}>{wallet.network}</div>
           </div>
-          <div className="tag tag-green">Authentic Lace</div>
+          <div className="tag tag-green">Connected</div>
         </div>
 
         <button
