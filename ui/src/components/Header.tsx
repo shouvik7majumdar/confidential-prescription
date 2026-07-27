@@ -6,10 +6,11 @@ interface HeaderProps {
   wallet: WalletState | null;
   activeTab: TabType;
   onSelectTab: (tab: TabType) => void;
+  onConnectWallet: () => void;
   onDisconnect: () => void;
 }
 
-export function Header({ network, wallet, activeTab, onSelectTab, onDisconnect }: HeaderProps) {
+export function Header({ network, wallet, activeTab, onSelectTab, onConnectWallet, onDisconnect }: HeaderProps) {
   const networkColors: Record<string, string> = {
     undeployed: '#34d399',
     preview: '#fb923c',
@@ -87,7 +88,7 @@ export function Header({ network, wallet, activeTab, onSelectTab, onDisconnect }
               <button
                 id="header-connect-btn"
                 className="btn btn-sm btn-primary"
-                onClick={() => onSelectTab('privacy')}
+                onClick={onConnectWallet}
               >
                 👛 Connect Lace
               </button>

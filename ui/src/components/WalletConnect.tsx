@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { WalletState } from '../types';
+import { requestLaceConnection, getLaceWalletProvider } from '../wallet-service';
 
 interface WalletConnectProps {
   wallet: WalletState | null;
@@ -14,9 +15,7 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
 
   useEffect(() => {
     const checkLace = () => {
-      const midnight = (window as any).midnight;
-      const laceObj = midnight?.mnLace || midnight?.lace;
-      setIsLaceInstalled(Boolean(laceObj));
+      setIsLaceInstalled(Boolean(getLaceWalletProvider()));
     };
 
     checkLace();
@@ -27,64 +26,9 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
   const connect = async () => {
     setIsConnecting(true);
     try {
-      const midnight = (window as any).midnight;
-      const lace = midnight?.mnLace || midnight?.lace;
-
-      if (!lace) {
-        const errorMsg = 'Lace Wallet for Midnight is not installed. Please install the Lace browser extension from https://www.lace.io/ and refresh this page.';
-        onError(errorMsg);
-        throw new Error(errorMsg);
-      }
-
-      // Trigger the authentic Lace Wallet browser permission popup
-      const enabledApi = await lace.enable();
-
-      if (!enabledApi) {
-        throw new Error('Connection request was rejected in Lace Wallet.');
-      }
-
-      // Query connected wallet details using supported Midnight DApp Connector API
-      let address = '';
-      let coinPublicKey = '';
-      let networkId = import.meta.env.VITE_NETWORK || 'undeployed';
-
-      if (typeof enabledApi.state === 'function') {
-        const state = await enabledApi.state();
-        address = state?.address || state?.addressHex || '';
-        coinPublicKey = state?.coinPublicKey || '';
-        networkId = state?.networkId || networkId;
-      }
-
-      if (!address && typeof enabledApi.getAddress === 'function') {
-        address = await enabledApi.getAddress();
-      }
-
-      if (!coinPublicKey && typeof enabledApi.coinPublicKey === 'function') {
-        const cpk = await enabledApi.coinPublicKey();
-        coinPublicKey = typeof cpk === 'string' ? cpk : JSON.stringify(cpk);
-      }
-
-      if (typeof enabledApi.getNetworkId === 'function') {
-        networkId = await enabledApi.getNetworkId();
-      }
-
-      if (!address) {
-        address = 'mn_addr_lace_connected';
-      }
-
-      const connectedWallet: WalletState = {
-        address,
-        coinPublicKey: coinPublicKey || 'Authenticated via Lace',
-        network: networkId,
-        isConnected: true,
-      };
-
+      const connectedWallet = await requestLaceConnection();
       onConnect(connectedWallet);
     } catch (err) {
-      if (err instanceof Error && err.message.includes('Lace Wallet for Midnight is not installed')) {
-        // Already handled above
-        return;
-      }
       const msg = err instanceof Error ? err.message : 'Failed to connect Lace wallet';
       onError(msg);
     } finally {

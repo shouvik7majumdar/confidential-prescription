@@ -11,6 +11,7 @@ import { PatientDashboard } from './components/PatientDashboard';
 import { PharmacyPortal } from './components/PharmacyPortal';
 import { VerificationHistory } from './components/VerificationHistory';
 import { QRCodeModal } from './components/QRCodeModal';
+import { requestLaceConnection } from './wallet-service';
 
 import type { WalletState, Toast, TabType } from './types';
 import type { Prescription, VerificationLog } from '../../src/healthcare-services';
@@ -164,6 +165,18 @@ function App() {
     onVerified(rx.id);
   };
 
+  const handleHeaderConnect = useCallback(async () => {
+    try {
+      const connectedWallet = await requestLaceConnection();
+      handleSetWallet(connectedWallet);
+      addToast('Midnight Lace Wallet connected!', 'success');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to connect Lace wallet';
+      addToast(msg, 'error');
+      setActiveTab('privacy');
+    }
+  }, [handleSetWallet, addToast]);
+
   const network = import.meta.env.VITE_NETWORK || 'undeployed';
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c';
 
@@ -174,6 +187,7 @@ function App() {
         wallet={wallet}
         activeTab={activeTab}
         onSelectTab={setActiveTab}
+        onConnectWallet={handleHeaderConnect}
         onDisconnect={() => handleSetWallet(null)}
       />
 
