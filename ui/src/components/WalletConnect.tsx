@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { WalletState } from '../types';
 import { requestLaceConnection, getLaceWalletProvider } from '../wallet-service';
 
@@ -13,22 +13,24 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLaceInstalled, setIsLaceInstalled] = useState<boolean | null>(null);
 
-  const checkLace = () => {
+  const checkLace = useCallback(() => {
     const provider = getLaceWalletProvider();
-    setIsLaceInstalled(Boolean(provider));
-    return Boolean(provider);
-  };
+    const installed = Boolean(provider);
+    setIsLaceInstalled(installed);
+    return installed;
+  }, []);
 
   useEffect(() => {
     checkLace();
-    const interval = setInterval(checkLace, 1000);
+    const interval = setInterval(checkLace, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [checkLace]);
 
-  const connect = async () => {
+  const connect = useCallback(async () => {
     setIsConnecting(true);
     try {
       const connectedWallet = await requestLaceConnection();
+      localStorage.setItem('midnight_wallet_connected', 'true');
       onConnect(connectedWallet);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Failed to connect Lace wallet';
@@ -36,7 +38,20 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
     } finally {
       setIsConnecting(false);
     }
-  };
+  }, [onConnect, onError]);
+
+  const disconnect = useCallback(() => {
+    localStorage.removeItem('midnight_wallet_connected');
+    onDisconnect();
+  }, [onDisconnect]);
+
+  // Auto-reconnect if session exists
+  useEffect(() => {
+    const wasConnected = localStorage.getItem('midnight_wallet_connected') === 'true';
+    if (wasConnected && !wallet && isLaceInstalled) {
+      connect().catch(() => localStorage.removeItem('midnight_wallet_connected'));
+    }
+  }, [wallet, isLaceInstalled, connect]);
 
   const connectDevnetFallback = () => {
     const devnetWallet: WalletState = {
@@ -56,26 +71,26 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
           Connect Lace Wallet
         </div>
 
-        {isLaceInstalled === false && (
+        {isLaceInstalled === false ? (
           <div className="alert alert-warning mb-4" style={{ marginBottom: '20px' }}>
             <span className="alert-icon">⚠️</span>
             <div>
-              <strong>Lace Extension Status:</strong> Lace wallet was not automatically detected on this tab.
+              <strong>Lace Extension Not Detected</strong>
               <br />
               <span style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block' }}>
-                If Lace is open in your side panel, make sure to click the puzzle icon in Chrome to allow extension access to <code>localhost:5173</code>.
+                Please install the <strong>Midnight Lace Wallet Extension</strong> to interact with the Midnight Network.
               </span>
             </div>
           </div>
-        )}
-
-        <div className="alert alert-info mb-4" style={{ marginBottom: '20px' }}>
-          <span className="alert-icon">ℹ️</span>
-          <div>
-            Connect your authentic <strong>Lace wallet</strong> to issue or verify confidential prescriptions.
-            Your private keys and health data never leave your device.
+        ) : (
+          <div className="alert alert-info mb-4" style={{ marginBottom: '20px' }}>
+            <span className="alert-icon">ℹ️</span>
+            <div>
+              Connect your authentic <strong>Lace wallet</strong> to issue or verify confidential prescriptions.
+              Your private keys and health data never leave your device.
+            </div>
           </div>
-        </div>
+        )}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <button
@@ -108,7 +123,7 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
                 className="btn btn-secondary btn-sm"
                 onClick={connectDevnetFallback}
               >
-                🧪 Use Devnet Wallet
+                🧪 Use Local Devnet Wallet
               </button>
             </div>
           )}
@@ -152,7 +167,7 @@ export function WalletConnect({ wallet, onConnect, onDisconnect, onError }: Wall
         <button
           id="wallet-disconnect-btn-card"
           className="btn btn-danger w-full"
-          onClick={onDisconnect}
+          onClick={disconnect}
         >
           Disconnect Wallet
         </button>
