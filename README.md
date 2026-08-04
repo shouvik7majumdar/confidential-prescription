@@ -248,14 +248,6 @@ npm test
 ![Prescriber Portal](docs/images/doctor-portal.png)
 *Prescriber Portal — Authorized healthcare providers issue digitally signed confidential credentials.*
 
-### Patient View — Confidential Credentials
-![Patient View](docs/images/app-page.png)
-*Patient View — Inspect confidential prescription credentials and generate instant verification QR codes.*
-
-### Pharmacy Portal — ZK Proof Verification
-![Pharmacy Portal](docs/images/dapp-interface.png)
-*Pharmacy Portal — On-chain Zero-Knowledge verification without exposing underlying patient health data.*
-
 ---
 
 ## 🏗️ System Architecture
