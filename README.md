@@ -25,7 +25,7 @@
 
 ### Landing Dashboard
 ![RxVerify Landing Page](docs/images/landing-page.png)
-*Landing Dashboard — Glassmorphism UI displaying real-time Zero-Knowledge metrics, healthcare telemetry, and wallet status.*
+*Landing Dashboard — Glassmorphism UI with Authentic Midnight Lace Wallet Authorization Popup Modal.*
 
 ### Prescription Issuance (Doctor Portal)
 ![Prescription Issue Page](docs/images/doctor-portal.png)
