@@ -101,12 +101,12 @@ export function LedgerState({ contractAddress, network, verificationCount, contr
               {contractAddress}
             </div>
             <a
-              href={`https://explorer.preview.midnight.network/contract/${contractAddress}`}
+              href="https://explorer.preview.midnight.network/"
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: 'inline-block', marginTop: '8px', fontSize: '11px', color: 'var(--accent-teal)', textDecoration: 'none', borderBottom: '1px solid var(--accent-teal)' }}
             >
-              🔗 View on Midnight Explorer →
+              🔗 View on Midnight Explorer (Paste address in search bar) →
             </a>
           </div>
 

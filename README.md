@@ -29,7 +29,7 @@
 | **🐙 GitHub Repository** | Open-source monorepo codebase | [GitHub Repo](https://github.com/shouvik7majumdar/confidential-prescription) |
 | **🎥 Demo Video** | Interactive application walkthrough | [Watch Demo Video](https://youtu.be/-8m0TcUsUUc) |
 | **⚙️ CI/CD Workflow** | GitHub Actions build & verification pipeline | [View CI/CD Pipeline](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml) |
-| **🔍 Smart Contract Explorer** | Midnight Preview Network Explorer | [Midnight Explorer](https://explorer.preview.midnight.network/contract/54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc) |
+| **🔍 Smart Contract Explorer** | Midnight Preview Network Explorer | [Midnight Explorer](https://explorer.preview.midnight.network/) |
 | **📄 Product Proposal** | Complete project documentation and specs | [PROPOSAL.md](PROPOSAL.md) |
 
 ---
@@ -94,7 +94,10 @@ The smart contract is deployed on the **Midnight Preview Network**:
 | **Target Network** | Midnight Preview Network (Network ID: `preview`) |
 | **Contract Name** | `prescription-verifier.compact` |
 | **Deployed Contract Address** | `54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc` |
-| **Explorer Verification** | [View Contract on Midnight Preview Explorer](https://explorer.preview.midnight.network/contract/54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc) |
+| **Deployment Tx Hash** | `08a9172562e3664a344b5403c9b8c5406f188fbf2a2b48a2653bc2e0b2fab623` |
+| **On-Chain Block Height** | Block `#271826` |
+| **Explorer Verification** | [Midnight NightScan Explorer](https://explorer.preview.midnight.network/) *(Search Contract Address or Tx Hash in top bar)* |
+| **Indexer GraphQL API** | `https://indexer.preview.midnight.network/api/v4/graphql` |
 | **Circuits Deployed** | `verifyPrescription` |
 
 ---

@@ -306,7 +306,7 @@ function App() {
             <a href="https://midnight.network" target="_blank" rel="noopener noreferrer">Midnight Network</a>
             {' '}· Preview Testnet · Zero-Knowledge Proofs · Level 3 Confidential Credentials ·{' '}
             <a
-              href="https://explorer.preview.midnight.network/contract/54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc"
+              href="https://explorer.preview.midnight.network/"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: 'var(--accent-teal)' }}
