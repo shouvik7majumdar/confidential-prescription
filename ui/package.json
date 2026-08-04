@@ -15,7 +15,7 @@
     "vite": "^8.1.1"
   },
   "dependencies": {
-    "@midnight-ntwrk/dapp-connector-api": "1.2.0",
+    "@midnight-ntwrk/dapp-connector-api": "1.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   }
