@@ -37,13 +37,13 @@
 
 | Metadata Field | Deployment Value |
 | :--- | :--- |
-| **Active Network** | Midnight Devnet (`undeployed`) / Compatible with `preprod` |
-| **Contract Address** | `15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef` |
-| **Deployer Address** | `mn_addr_undeployed1h3ssm5ru2t6eqy4g3she78zlxn96e36ms6pq996aduvmateh9p9sk96u7s` |
-| **Deployment Status** | 🟢 **Active & Deployed** |
-| **Deployment Date** | `2026-07-27T14:08:21.515Z` |
-| **Deployment Method** | Compact v0.31 compiler; deployed via `npm run setup` orchestrator script |
-| **Midnight Preprod Explorer** | [View on Midnight Explorer](https://explorer.midnight.network/contract/15973ac8d96a98faec7d1a4a2d429ee522ca2b5c0e1b3b97cda44cd76da080ef) |
+| **Active Network** | Midnight Preview Testnet (`preview`) |
+| **Contract Address** | `54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc` |
+| **Deployer Address** | `mn_addr_preview1084njc56nmzq6amt480u9aeyhh95p67mcwh2dmfnu05857857vxqxryfe4` |
+| **Deployment Status** | 🟢 **Active & Deployed on Preview Testnet** |
+| **Deployment Date** | `2026-08-04T12:38:15.420Z` |
+| **Deployment Method** | Compact v0.31 compiler; deployed via `npm run deploy -- --network preview` |
+| **Midnight Explorer Link** | [View Contract on Midnight Explorer](https://explorer.preview.midnight.network/contract/54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc) |
 
 ---
 

@@ -127,12 +127,21 @@ async function main(): Promise<void> {
   const unregisteredUtxos = dustState.unshielded.availableCoins.filter((c: any) => !c.meta?.registeredForDustGeneration);
   if (unregisteredUtxos.length > 0) {
     console.log(`  Registering ${unregisteredUtxos.length} UTXOs for DUST...`);
-    const recipe = await walletCtx.wallet.registerNightUtxosForDustGeneration(
-      unregisteredUtxos,
-      walletCtx.unshieldedKeystore.getPublicKey(),
-      (payload: any) => walletCtx.unshieldedKeystore.signData(payload),
-    );
-    await walletCtx.wallet.submitTransaction(await walletCtx.wallet.finalizeRecipe(recipe));
+    for (let i = 1; i <= 3; i++) {
+      try {
+        const recipe = await walletCtx.wallet.registerNightUtxosForDustGeneration(
+          unregisteredUtxos,
+          walletCtx.unshieldedKeystore.getPublicKey(),
+          (payload: any) => walletCtx.unshieldedKeystore.signData(payload),
+        );
+        await walletCtx.wallet.submitTransaction(await walletCtx.wallet.finalizeRecipe(recipe));
+        console.log('  ✓ DUST registration submitted!');
+        break;
+      } catch (err: any) {
+        console.warn(`  ⚠ DUST registration attempt ${i}/3: ${err?.message || err}`);
+        if (i < 3) await new Promise(r => setTimeout(r, 4000));
+      }
+    }
   }
   if (dustState.dust.balance(new Date()) === 0n) {
     console.log('  Waiting for DUST...');
