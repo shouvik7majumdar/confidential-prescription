@@ -96,10 +96,18 @@ export function LedgerState({ contractAddress, network, verificationCount, contr
           </div>
 
           <div style={{ marginTop: '16px', padding: '12px', background: 'var(--bg-input)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Contract Address</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Contract Address — Midnight Preview Testnet</div>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>
               {contractAddress}
             </div>
+            <a
+              href={`https://explorer.preview.midnight.network/contract/${contractAddress}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-block', marginTop: '8px', fontSize: '11px', color: 'var(--accent-teal)', textDecoration: 'none', borderBottom: '1px solid var(--accent-teal)' }}
+            >
+              🔗 View on Midnight Explorer →
+            </a>
           </div>
 
           {lastUpdated && (

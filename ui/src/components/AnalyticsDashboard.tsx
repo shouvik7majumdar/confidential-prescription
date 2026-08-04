@@ -42,7 +42,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         </div>
         <div className="status-indicator-badge">
           <span className={`dot ${contractActive ? 'dot-active' : 'dot-inactive'}`}></span>
-          {contractActive ? 'Midnight Devnet Connected' : 'Ledger Syncing...'}
+          {contractActive ? 'Midnight Preview Testnet Connected' : 'Ledger Syncing...'}
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       <div className="system-health-banner">
         <div className="health-item">
           <span className="health-label">ZK Proof Prover Engine</span>
-          <span className="health-value text-success">● Midnight Prover Active (Port 6300)</span>
+          <span className="health-value text-success">● Preview Proof Server Active (proof-server.preview.midnight.network)</span>
         </div>
         <div className="health-item">
           <span className="health-label">Data Privacy Level</span>

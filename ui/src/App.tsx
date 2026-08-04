@@ -177,8 +177,8 @@ function App() {
     }
   }, [handleSetWallet, addToast]);
 
-  const network = import.meta.env.VITE_NETWORK || 'undeployed';
-  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '58e1e74340e5a250668f9a9da1597b1bddca694440545796994d9d186db2f36c';
+  const network = import.meta.env.VITE_NETWORK || 'preview';
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS || '54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc';
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -304,7 +304,15 @@ function App() {
           <p>
             Built on{' '}
             <a href="https://midnight.network" target="_blank" rel="noopener noreferrer">Midnight Network</a>
-            {' '}· Zero-Knowledge Proofs · Level 3 Confidential Credentials · Medical Data Never Leaves Your Device
+            {' '}· Preview Testnet · Zero-Knowledge Proofs · Level 3 Confidential Credentials ·{' '}
+            <a
+              href="https://explorer.preview.midnight.network/contract/54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--accent-teal)' }}
+            >
+              View Contract on Explorer
+            </a>
           </p>
         </div>
       </footer>

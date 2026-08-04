@@ -67,12 +67,12 @@ export async function requestLaceConnection(timeoutMs: number = 12000): Promise<
     );
   }
 
-  // Midnight DApp Connector Service URI configuration
+  // Midnight DApp Connector Service URI configuration — Preview Testnet
   const serviceUriConfig = {
-    indexer: 'http://127.0.0.1:8088/api/v4/graphql',
-    indexerWS: 'ws://127.0.0.1:8088/api/v4/graphql/ws',
-    node: 'ws://127.0.0.1:9944',
-    proofServer: 'http://127.0.0.1:6300',
+    indexer: import.meta.env.VITE_INDEXER_URL || 'https://indexer.preview.midnight.network/api/v4/graphql',
+    indexerWS: import.meta.env.VITE_INDEXER_WS_URL || 'wss://indexer.preview.midnight.network/api/v4/graphql/ws',
+    node: import.meta.env.VITE_NODE_URL || 'https://rpc.preview.midnight.network',
+    proofServer: import.meta.env.VITE_PROOF_SERVER_URL || 'https://proof-server.preview.midnight.network',
   };
 
   // Helper for timeout
