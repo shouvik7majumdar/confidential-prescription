@@ -49,7 +49,7 @@ export function getLaceWalletProvider(): DAppConnectorAPI | null {
   return null;
 }
 
-export async function requestLaceConnection(): Promise<WalletState> {
+export async function requestLaceConnection(timeoutMs: number = 12000): Promise<WalletState> {
   let provider = getLaceWalletProvider();
 
   // Polling wait for asynchronously injected content scripts
@@ -63,7 +63,7 @@ export async function requestLaceConnection(): Promise<WalletState> {
 
   if (!provider) {
     throw new Error(
-      'Midnight Lace Wallet extension was not detected on localhost:5173. Please install the Midnight Lace Wallet preview extension and ensure Chrome extension site permissions allow access to localhost.'
+      'Midnight Lace Wallet extension was not detected on this browser tab. Please install the Midnight Lace Wallet extension and refresh.'
     );
   }
 
@@ -75,18 +75,32 @@ export async function requestLaceConnection(): Promise<WalletState> {
     proofServer: 'http://127.0.0.1:6300',
   };
 
-  // Trigger authentic Lace wallet permission popup in browser
+  // Helper for timeout
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => {
+      reject(
+        new Error(
+          'Lace Wallet connection timed out. If a popup window did not automatically open, please click the Lace Wallet extension icon in your Chrome toolbar to manually approve the pending request.'
+        )
+      );
+    }, timeoutMs);
+  });
+
+  // Trigger authentic Lace wallet permission request with timeout race
   let enabledApi: DAppConnectorWalletAPI | any;
   try {
-    // Attempt calling enable with Midnight serviceUriConfig first, fallback to no args for standard CIP-30
-    try {
-      enabledApi = await provider.enable(serviceUriConfig);
-    } catch {
-      enabledApi = await provider.enable();
-    }
+    const enableCall = (async () => {
+      try {
+        return await provider.enable(serviceUriConfig);
+      } catch {
+        return await provider.enable();
+      }
+    })();
+
+    enabledApi = await Promise.race([enableCall, timeoutPromise]);
   } catch (err) {
     throw new Error(
-      'Wallet connection request was cancelled or declined in Lace: ' + (err instanceof Error ? err.message : String(err))
+      err instanceof Error ? err.message : 'Wallet connection request was cancelled or timed out.'
     );
   }
 
