@@ -30,18 +30,6 @@
 ![Prescription Issue Page](docs/images/doctor-portal.png)
 *Doctor Portal — Authorized prescribers issue digitally signed confidential prescription credentials.*
 
-### Prescription Verification (Pharmacy Portal)
-![Verification Page](docs/images/verification-page.png)
-*Pharmacy Verification Portal — Zero-Knowledge proof verification via QR codes and confidential tokens.*
-
-### Privacy Model & Wallet State
-![Privacy Model & Wallet Verification](docs/images/wallet-connected.png)
-*Privacy Model & Connected Wallet State — Public ledger inspector and authentic Lace Wallet connector.*
-
-### CI/CD Automated Pipeline
-![RxVerify CI Pipeline](docs/images/ci-pipeline.png)
-*GitHub Actions CI/CD Pipeline — Compact Compilation & Vitest Test Execution.*
-
 ---
 
 ## 🔗 Contract Deployment Details
