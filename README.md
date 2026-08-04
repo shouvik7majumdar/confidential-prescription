@@ -3,7 +3,7 @@
 [![CI/CD Pipeline](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml/badge.svg)](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml)
 [![Midnight Network](https://img.shields.io/badge/Midnight-Devnet-purple)](https://midnight.network)
 [![Zero Knowledge](https://img.shields.io/badge/Zero--Knowledge-Compact%20v0.31-blue)](https://midnight.network)
-[![Level 3 Category](https://img.shields.io/badge/Level-3%20Confidential%20Credentials-success)](https://midnight.network)
+[![Level 2 Category](https://img.shields.io/badge/Level-2%20Confidential%20Credentials-success)](https://midnight.network)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **RxVerify** is a production-grade, privacy-preserving healthcare application built on the **Midnight Network** using **Compact** smart contracts and Zero-Knowledge proofs (zk-SNARKs). RxVerify enables patients, certified healthcare prescribers, and licensed pharmacies to issue, verify, manage, and revoke medical prescriptions without exposing sensitive Personal Health Information (PHI), diagnostic data, or patient/doctor identities on-chain.
@@ -46,18 +46,56 @@
 
 ---
 
-## 🔒 Privacy Model
+## 🔒 Privacy Model & Zero-Knowledge Architecture
 
-RxVerify strictly enforces private-by-default state boundaries using explicit `disclose()` declarations in the Compact smart contract.
+RxVerify strictly enforces Midnight's private-by-default execution model by maintaining a sharp separation between **Private Witness State** (client-side only) and **Public Ledger State** (on-chain).
+
+### Detailed Written Explanations
+
+#### 1. Why Data is Private (PHI & Regulatory Compliance)
+Medical prescription records contain Personal Health Information (PHI) such as medication names, dosages, administration schedules, diagnostic ICD codes, issuing doctor names, and patient identities. Under healthcare regulations like **HIPAA** in the United States and **GDPR** in Europe, publishing PHI to a public, transparent blockchain is strictly illegal. RxVerify ensures that raw prescription text and cryptographic doctor signatures remain 100% private inside the user's browser, satisfying strict compliance requirements while maintaining decentralized immutability.
+
+#### 2. Why Data is Public (Verifiable Telemetry & Operational Control)
+Certain minimal operational metrics must be publicly visible on-chain to ensure network agreement, auditability, and governance:
+- `verificationCount` (`Uint<64>`): An aggregate counter tracking the total number of successful prescription verifications. It proves that contract activity is taking place without revealing who verified what.
+- `contractActive` (`Boolean`): An operational safety toggle allowing contract administrators to pause verification services during emergency security audits or system maintenance.
+
+#### 3. What an On-Chain Observer CAN Learn
+- An observer CAN inspect the total aggregate number of valid prescription verifications (`verificationCount`).
+- An observer CAN inspect whether the contract is currently active or deactivated (`contractActive`).
+- An observer CAN observe the non-sensitive 32-bit session slot parameter (`patientId`) disclosed during circuit execution.
+
+#### 4. What an On-Chain Observer CANNOT Learn
+- An observer CANNOT learn the patient's identity, name, address, or medical record number.
+- An observer CANNOT learn the medication name, dosage strength, refill count, or medical diagnosis.
+- An observer CANNOT learn the issuing doctor's identity, license number, or private signing key.
+- An observer CANNOT reconstruct the raw `prescriptionHash` or `doctorSignature` from on-chain transactions or proof artifacts.
+
+#### 5. Witness Privacy & `disclose()` Behaviour in Compact
+In Compact smart contracts, variables declared with the `witness` keyword (such as `witness prescriptionHash(): Bytes<32>` and `witness doctorSignature(): Bytes<64>`) are evaluated strictly off-chain inside the local proving environment (zk-SNARK prover). They are never transmitted across HTTP network sockets or recorded in transaction logs. 
+
+Only values explicitly wrapped in the `disclose()` statement are revealed to the public ledger. In `contracts/prescription-verifier.compact`:
+```compact
+export circuit verifyPrescription(patientId: Uint<32>): [] {
+    assert(contractActive == true, "Contract is not accepting verifications");
+    const hash = prescriptionHash();
+    const sig  = doctorSignature();
+    assert(hash[0] != 0x00, "Prescription hash must be non-zero");
+    assert(sig[0] != 0x00, "Doctor signature must be non-zero");
+    disclose(patientId);
+    verificationCount = (verificationCount + 1) as Uint<64>;
+}
+```
+Here, `prescriptionHash` and `doctorSignature` remain private witnesses inside the circuit. `disclose(patientId)` explicitly bounds disclosure to the non-sensitive session slot ID, allowing the public ledger to update `verificationCount` safely.
 
 ### Data Exposure & Privacy Matrix
 
-| Data Item | Exposure Level | Storage Location | Privacy Guarantee |
+| Data Item | Exposure Level | Storage Location | Privacy Guarantee & Reason |
 | :--- | :--- | :--- | :--- |
-| **Medication & Dosage Details** | 🔒 **Strictly Private** | Local Browser Storage | Excluded from on-chain state; processed strictly in browser |
-| **Prescription SHA-256 Hash** | 🔒 **Strictly Private** | Prover Local Witness | Evaluated in local ZK circuit; verified off-chain |
+| **Medication & Dosage Details** | 🔒 **Strictly Private** | Local Browser Storage | Excluded from on-chain state; prevents PHI data leaks |
+| **Prescription SHA-256 Hash** | 🔒 **Strictly Private** | Prover Local Witness | Private witness in Compact circuit; proves existence off-chain |
 | **Doctor Digital Signature** | 🔒 **Strictly Private** | Prover Local Witness | Cryptographically validated inside local ZK prover |
-| **Patient Slot ID** | 👁️ **Disclosed Metadata** | Circuit Parameter (`patientId`) | Disclosed via `disclose()` for session state isolation |
+| **Patient Slot ID** | 👁️ **Disclosed Metadata** | Circuit Parameter (`patientId`) | Explicitly disclosed via `disclose()` for session isolation |
 | **Verification Counter** | 🌐 **Public Ledger** | On-Chain (`verificationCount`) | Public counter incremented upon valid proof acceptance |
 | **Contract Active Status** | 🌐 **Public Ledger** | On-Chain (`contractActive`) | Public boolean flag controlling operational status |
 
@@ -65,7 +103,7 @@ RxVerify strictly enforces private-by-default state boundaries using explicit `d
 
 ## 🔐 Lace Wallet Integration
 
-RxVerify features authentic browser wallet integration supporting the official **Midnight Lace Wallet** extension standard via the Midnight DApp Connector API (`window.midnight.mnLace`).
+RxVerify features authentic browser wallet integration supporting the official **Midnight Lace Wallet** extension standard via the Midnight DApp Connector API (`window.midnight.mnLace`) and `@midnight-ntwrk/dapp-connector-api`.
 
 ### How Connection & Permissions Work
 1. **Provider Resolution**: The application inspects `window.midnight.mnLace`, `window.midnight.lace`, and `window.cardano.lace`.

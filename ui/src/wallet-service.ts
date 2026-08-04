@@ -1,35 +1,36 @@
 import type { WalletState } from './types';
+import type { DAppConnectorAPI, DAppConnectorWalletAPI } from '@midnight-ntwrk/dapp-connector-api';
 
-export function getLaceWalletProvider(): any {
+export function getLaceWalletProvider(): DAppConnectorAPI | null {
   if (typeof window === 'undefined') return null;
   const win = window as any;
 
   // 1. Official Midnight Lace Extension (window.midnight)
   if (win.midnight) {
-    if (win.midnight.mnLace) return win.midnight.mnLace;
-    if (win.midnight.lace) return win.midnight.lace;
+    if (win.midnight.mnLace) return win.midnight.mnLace as DAppConnectorAPI;
+    if (win.midnight.lace) return win.midnight.lace as DAppConnectorAPI;
     for (const key of Object.keys(win.midnight)) {
       if (win.midnight[key] && typeof win.midnight[key].enable === 'function') {
-        return win.midnight[key];
+        return win.midnight[key] as DAppConnectorAPI;
       }
     }
   }
 
   // 2. Cardano Lace Extension (window.cardano)
   if (win.cardano) {
-    if (win.cardano.mnLace) return win.cardano.mnLace;
-    if (win.cardano.lace) return win.cardano.lace;
-    if (typeof win.cardano.enable === 'function') return win.cardano;
+    if (win.cardano.mnLace) return win.cardano.mnLace as DAppConnectorAPI;
+    if (win.cardano.lace) return win.cardano.lace as DAppConnectorAPI;
+    if (typeof win.cardano.enable === 'function') return win.cardano as DAppConnectorAPI;
     for (const key of Object.keys(win.cardano)) {
       if (win.cardano[key] && typeof win.cardano[key].enable === 'function') {
-        return win.cardano[key];
+        return win.cardano[key] as DAppConnectorAPI;
       }
     }
   }
 
   // 3. Root Window Objects
-  if (win.mnLace && typeof win.mnLace.enable === 'function') return win.mnLace;
-  if (win.lace && typeof win.lace.enable === 'function') return win.lace;
+  if (win.mnLace && typeof win.mnLace.enable === 'function') return win.mnLace as DAppConnectorAPI;
+  if (win.lace && typeof win.lace.enable === 'function') return win.lace as DAppConnectorAPI;
 
   // 4. Global Property Search
   try {
@@ -39,7 +40,7 @@ export function getLaceWalletProvider(): any {
       if (lower.includes('lace') || lower.includes('midnight') || lower.includes('cardano')) {
         const obj = win[prop];
         if (obj && typeof obj.enable === 'function') {
-          return obj;
+          return obj as DAppConnectorAPI;
         }
       }
     }
@@ -75,7 +76,7 @@ export async function requestLaceConnection(): Promise<WalletState> {
   };
 
   // Trigger authentic Lace wallet permission popup in browser
-  let enabledApi: any;
+  let enabledApi: DAppConnectorWalletAPI | any;
   try {
     // Attempt calling enable with Midnight serviceUriConfig first, fallback to no args for standard CIP-30
     try {
