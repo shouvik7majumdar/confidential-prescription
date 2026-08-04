@@ -3,7 +3,8 @@
 [![CI/CD Pipeline](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml/badge.svg)](https://github.com/shouvik7majumdar/confidential-prescription/actions/workflows/ci.yml)
 [![Midnight Network](https://img.shields.io/badge/Midnight-Devnet-purple)](https://midnight.network)
 [![Zero Knowledge](https://img.shields.io/badge/Zero--Knowledge-Compact%20v0.31-blue)](https://midnight.network)
-[![Level 2 Category](https://img.shields.io/badge/Level-2%20Confidential%20Credentials-success)](https://midnight.network)
+[![Level 3 Category](https://img.shields.io/badge/Level-3%20Confidential%20Credentials-success)](https://midnight.network)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Live%20App-black?logo=vercel)](https://confidential-prescriptionnn.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **RxVerify** is a production-grade, privacy-preserving healthcare application built on the **Midnight Network** using **Compact** smart contracts and Zero-Knowledge proofs (zk-SNARKs). RxVerify enables patients, certified healthcare prescribers, and licensed pharmacies to issue, verify, manage, and revoke medical prescriptions without exposing sensitive Personal Health Information (PHI), diagnostic data, or patient/doctor identities on-chain.
@@ -201,7 +202,7 @@ npm run dev:ui
 
 ## 🧪 Testing & Verification
 
-Run the full automated test suite:
+Run the full automated test suite (30 passing unit/integration tests):
 ```bash
 npm run test
 ```
