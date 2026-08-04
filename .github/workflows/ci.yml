@@ -50,8 +50,26 @@ jobs:
       - name: Run Tests
         run: npm test
 
-      - name: Build Frontend (UI)
+      - name: Setup Node.js for UI
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install UI Dependencies
         run: |
           cd ui
           npm ci
+
+      - name: Build Frontend (UI)
+        env:
+          VITE_NETWORK: preview
+          VITE_CONTRACT_ADDRESS: 54b40b55db6c344ddb1511d13c93e2bbbb280b4c1738b912cd838f5ac94df8dc
+          VITE_PROOF_SERVER_URL: https://proof-server.preview.midnight.network
+          VITE_INDEXER_URL: https://indexer.preview.midnight.network/api/v4/graphql
+          VITE_INDEXER_WS_URL: wss://indexer.preview.midnight.network/api/v4/graphql/ws
+        run: |
+          cd ui
           npm run build
+          echo "✅ UI built successfully."
